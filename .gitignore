@@ -1,2 +1,5 @@
 .idea
 /vertx-rest-api-server/target
+/vertx-rest-api-server/vertx-java.iml
+.DS_Store
+**/**.DS_Store
