@@ -1,0 +1,26 @@
+const nodemailer = require('nodemailer'); 
+
+
+let mailTransporter = nodemailer.createTransport({ 
+    service 'gmail', 
+    auth { 
+        user 'rohit.singh16infy@gmail.com',
+        pass 'Rajdev1955'
+    } 
+}); 
+
+let mailDetails = { 
+    from 'rohit.singh16infy@gmail.com', 
+    to 'rohit.singh16infy@gmail.com', 
+    subject 'Test mail', 
+    text 'Node.js testing mail for GeeksforGeeks'
+}; 
+
+mailTransporter.sendMail(mailDetails, function(err, data) { 
+    if(err) { 
+        console.log(err);
+        console.log('Error Occurs'); 
+    } else { 
+        console.log('Email sent successfully'); 
+    } 
+}); 
