@@ -8,8 +8,8 @@ const request = require('request');
 var schedule = require('node-schedule');
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
-const from_id = '<enter your email>';
-const from_pwd = '<enter your password>';
+const from_id = '<enter you email>';
+const from_pwd = '<enter you password>';
 const apiURL = 'http://localhost:3001/';
 /***
  * Read email template
@@ -17,16 +17,20 @@ const apiURL = 'http://localhost:3001/';
 var imapConfig = {
     user: from_id,
     password: from_pwd,
-    host: 'imap.gmail.com',
+    host: 'smtp-mail.outlook.com',
     port: 993,
     tls: true,
-    authTimeout: 250000
+    tlsOptions: {
+        rejectUnauthorized: false
+    },
+    keepalive: true
 };
 
 var imap = null;
 
 var j = schedule.scheduleJob('*/1 * * * *', function(){
     console.log('Poll mail box every 1 min');
+    imap && (imap = null);
     imap = new Imap(imapConfig);
     Promise.promisifyAll(imap);
 
@@ -72,10 +76,10 @@ function processMessage(msg, seqno) {
         if (data.type === 'text') {
             console.log("Processing msg #" + seqno);
             let mailResponse = data.textAsHtml;
-            let employeeid = mailResponse.split('Employee Id: ')[1].split('<br/>')[0];
-            let employeeName = mailResponse.split('Employee Name: ')[1].split('<br/>')[0];
-            let projectcode = mailResponse.split('Project Code: ')[1].split('<br/>')[0];
-            let allocation = mailResponse.split('Allocation (dd/mm/yyyy): ')[1].split('<br/>')[0];
+            let employeeid = mailResponse.split('Employee Id: ')[1].split('<')[0].replace(/^\s+|\s+$/g, '' );
+            let employeeName = mailResponse.split('Employee Name: ')[1].split('<')[0].replace(/^\s+|\s+$/g, '' );
+            let projectcode = mailResponse.split('Project Code: ')[1].split('<')[0].replace(/^\s+|\s+$/g, '' );
+            let allocation = mailResponse.split('Allocation (dd/mm/yyyy): ')[1].split('<')[0].replace(/^\s+|\s+$/g, '' );
             let employeeAllocJSON = {
                 'employeeId': employeeid,
                 'employeeName': employeeName,

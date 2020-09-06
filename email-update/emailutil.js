@@ -2,17 +2,29 @@
  * Send email template
  */
 const nodemailer = require('nodemailer'); 
-const to_id = '<enter your email>';
-const from_id = '<enter your email>';
-const from_pwd = '<enter your password>';
+const to_id = '<enter you email>';
+const from_id = '<enter you email>';
+const from_pwd = '<enter you password>';
 module.exports = function(){ 
-    let mailTransporter = nodemailer.createTransport({ 
+    /*let mailTransporter = nodemailer.createTransport({ 
         service: 'gmail', 
         auth: { 
             user:from_id,
             pass: from_pwd
         } 
-    }); 
+    }); */
+    var mailTransporter = nodemailer.createTransport({
+        host: "smtp-mail.outlook.com", // hostname
+        secureConnection: false, // TLS requires secureConnection to be false
+        port: 587, // port for secure SMTP
+        auth: {
+            user:from_id,
+            pass: from_pwd
+        },
+        tls: {
+            ciphers:'SSLv3'
+        }
+    });
     let mailDetails = { 
         from: from_id, 
         to: to_id, 
