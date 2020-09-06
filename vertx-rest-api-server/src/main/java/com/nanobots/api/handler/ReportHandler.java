@@ -1,4 +1,5 @@
 package com.nanobots.api.handler;
+
 import com.nanobots.api.constants.Config;
 import com.nanobots.api.excel.ExcelToHtml;
 import io.vertx.core.http.HttpServerResponse;
@@ -14,9 +15,9 @@ public class ReportHandler {
     response.putHeader("Content-Type", "text/html");
 
     try {
-      URL url =Class.forName(Config.MAIN_APP_CLASS).getResource(Config.DATA_SET_FILE_NAME);
+      URL url = Class.forName(Config.MAIN_APP_CLASS).getResource(Config.DATA_SET_FILE_NAME);
       File excelDataSet = new File(url.getPath());
-      ExcelToHtml.parse(excelDataSet);
+      ExcelToHtml.parse(excelDataSet, Config.HTML_REPORT_FILE_NAME);
       response.sendFile(Config.HTML_REPORT_FILE_NAME);
 
     } catch (Exception e) {

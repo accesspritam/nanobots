@@ -23,14 +23,52 @@ public class ExcelToHtml {
   private static final String HTML_FILE_EXTENSION = ".html";
   private static final String TEMP_FILE_EXTENSION = ".tmp";
   private static final String HTML_SNNIPET_1 = "<!DOCTYPE html><html><head><title>";
-  private static final String HTML_SNNIPET_2 = "</title></head><body><table>";
+  private static final String HTML_SNNIPET_2 =
+      "</title>"
+          + "<STYLE type=\"text/css\">\n"
+          + "    .styled-table {\n"
+          + "    border-collapse: collapse;\n"
+          + "    margin-left:auto; margin-right:auto;\n"
+          + "    font-size: 0.9em;\n"
+          + "    font-family: sans-serif;\n"
+          + "    min-width: 400px;\n"
+          + "    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);\n"
+          + "}\n"
+          + ".styled-table thead tr {\n"
+          + "    background-color: #009879;\n"
+          + "    color: #ffffff;\n"
+          + "    text-align: left;\n"
+          + "}\n"
+          + ".styled-table th,\n"
+          + ".styled-table td {\n"
+          + "    padding: 12px 15px;\n"
+          + "}\n"
+          + ".styled-table tbody tr {\n"
+          + "    border-bottom: 1px solid #dddddd;\n"
+          + "}\n"
+          + "\n"
+          + ".styled-table tbody tr:nth-of-type(even) {\n"
+          + "    background-color: #f3f3f3;\n"
+          + "}\n"
+          + "\n"
+          + ".styled-table tbody tr:last-of-type {\n"
+          + "    border-bottom: 2px solid #009879;\n"
+          + "}\n"
+          + ".styled-table tbody tr.active-row {\n"
+          + "    font-weight: bold;\n"
+          + "    color: #009879;\n"
+          + "}\n"
+          + "</STYLE>"
+          + "</head><body><table class=\"styled-table\">";
   private static final String HTML_SNNIPET_3 = "</table></body></html>";
+  private static final String HTML_TR_S_ACTIVE_ROW = "<tr class=\"active-row\">";
   private static final String HTML_TR_S = "<tr>";
   private static final String HTML_TR_E = "</tr>";
   private static final String HTML_TD_S = "<td>";
   private static final String HTML_TD_E = "</td>";
 
-  public static void parse(File file) throws FileNotFoundException, IOException {
+  public static void parse(File file, String htmlFileName)
+      throws FileNotFoundException, IOException {
     BufferedWriter writer;
     Workbook workbook;
     String fileName = file.getName();
@@ -55,7 +93,10 @@ public class ExcelToHtml {
       Row row = rows.next();
       cells = row.cellIterator();
       writer.write(NEW_LINE);
-      writer.write(HTML_TR_S);
+
+      if (row.getRowNum() % 2 == 0) writer.write(HTML_TR_S_ACTIVE_ROW);
+      else writer.write(HTML_TR_S);
+
       while (cells.hasNext()) {
         Cell cell = cells.next();
         writer.write(HTML_TD_S);
@@ -67,8 +108,9 @@ public class ExcelToHtml {
     writer.write(NEW_LINE);
     writer.write(HTML_SNNIPET_3);
     writer.close();
-    File newFile = new File(folderName + "/Report" + HTML_FILE_EXTENSION);
+    File newFile = new File(folderName + "/" + htmlFileName);
     tempFile.renameTo(newFile);
+    tempFile.delete();
 
     System.out.println(newFile.getAbsolutePath());
   }
