@@ -1,0 +1,38 @@
+image: maven:3.3.9-jdk-8
+
+variables:
+  CI_PROJECT_DIR_VERTX: vertx-rest-api-server
+  CI_PROJECT_DIR_BOT: botkit-bot
+
+stages:
+  - build
+  - test
+  - deploy
+  
+build_vertx:
+  stage: build
+  script:
+    - cd ${CI_PROJECT_DIR_VERTX}
+    - mvn compile
+    
+test_vertx:
+  stage: test
+  needs: [build_vertx]
+  script:
+    - cd ${CI_PROJECT_DIR_VERTX}
+    - mvn test
+
+run_vertx:
+  stage: deploy
+  needs: [test_vertx]
+  script:
+    - cd ${CI_PROJECT_DIR_VERTX}
+    - mvn package
+
+
+build_bot:
+  image: node:latest
+  stage: build
+  script:
+   - cd ${CI_PROJECT_DIR_BOT}
+   - npm install

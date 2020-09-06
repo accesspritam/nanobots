@@ -3,9 +3,7 @@
  * Licensed under the MIT License.
  */
 require('./data_provider.js')();
-let contacts = new Map()
-contacts.set("655214", {first_name: "Pritam",last_name: "Patil", project_code: "NEMOAXPUK", allocation_until: "18 Dec 2020"});
-contacts.set("655198", {first_name: "Pritam",last_name: "Patil", project_code: "NEMOAXPUK", allocation_until: "18 Dec 2020"});
+
 const request = require('request');
 
 let url = "http://localhost:3001/";
@@ -102,16 +100,7 @@ let options = {json: true};
            employeeAlloc.employeeId = message.text.trim();
            await bot.reply(message, 'Employee Name?');
        }
-       /*if (contacts.has(message.text))
-       {
-           console.log(JSON.stringify(contacts.get(message.text)));
-           message.text = "Emp id "+message.text +" was found...Retrieving details \n "+ JSON.stringify(contacts.get(message.text), null, "\t");;
-           }
-       else
-           message.text = "Emp id "+message.text +" was not Found, please re-enter";
-
-           await bot.reply(message, `${ message.text }`);*/
-   });
+  });
 
    // match any one of set of mixed patterns like a string, a regular expression
    controller.hears(new RegExp("[a-zA-Z0-9]","gi"), ['message','direct_message'], async function(bot, message) {
