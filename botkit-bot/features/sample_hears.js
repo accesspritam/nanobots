@@ -3,6 +3,7 @@
  * Licensed under the MIT License.
  */
 require('./data_provider.js')();
+var stringSimilarity = require('string-similarity');
 
 const request = require('request');
 
@@ -16,7 +17,7 @@ let options = {json: true};
     controller.hears(async (message) => message.text && message.text.toLowerCase() == 'yes', ['message','direct_message'], async function(bot, message) {
        setcurrent_field(null);
        // get data from backend
-        await new Promise(resolve => {
+        await new Promise(resolve => { 
            request.post({
                url: url+'postmessage', 
                json: employeeAlloc,
@@ -123,10 +124,19 @@ let options = {json: true};
                    setcurrent_field(null);
                    return await bot.reply(message, 'Sorry couldnot understand. Please enter your emp id or type add to continue');
            }
-       }
-       else{
-           await bot.reply(message, 'Sorry couldnot understand. Please enter your emp id or type add to continue');                   
-       }
+       }      
+        else{
+            //add learning capability for new keyword.
+            let keys = [...getkeywords_group().keys()];
+            var matches = stringSimilarity.findBestMatch(message.text.trim().toLowerCase(), keys);
+            if(matches && matches.bestMatchIndex>=0 && matches.bestMatch && matches.bestMatch.rating>0){
+                let group = getkeywords_group().get(keys[matches.bestMatchIndex]);
+                await getgroup_function(group, bot, message);
+            }
+            else
+                await bot.reply(message, 'Sorry couldnot understand. Please enter your emp id or type add to continue');                   
+        }
+
    });
 
 }
