@@ -35,7 +35,7 @@ router.get('/sendreminder', function(req, res) {
 router.get('/get/report', function(req, res) {
   sendReport();
   return res.sendFile('/Users/accesspritam/IdeaProjects/nanobots/email-update/report.html');
-
+});
 // add router in the Express app.
 app.use("/", router);
 app.listen(3001);
