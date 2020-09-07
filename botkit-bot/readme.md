@@ -14,11 +14,28 @@ Edit the samples, and add your own in the [features/](features/) folder.
 
 
 
-To run bot:
+To run solution follow the instructions:
 
-1. ensure npm is installed 
-2. install botkit using ```npm install -g yo generator-botkit```.
-3. run ```cd botkit-bot```.
-4. run ```npm start```
-5. load it in your browser at http://localhost:3000 and get to chatting!
+- ensure npm is installed 
+- install botkit using ```npm install -g yo generator-botkit```.
+- go to parent directory for the project which is  ```cd botkit-bot```.
+- run ```npm start```
+<br>this will start BOT server at http://localhost:3000 and get to chatting!
+
+- along with this you will need api server which runs at http://localhost:3001
+- both bot server and api server are mandatory to access entire solution.
+- to start api server go to ```cd email-update```
+- run ```npm start```
+<br>this will start API server at http://localhost:3001
+<br><br>Below are the api's supported.
+
+## POST - /postmessage
+- post api to store allocation/projection data 
+## GET - /getalloc/:id 
+- get api to retrieve allocation/projection data based on empid
+## POST - /sendreminder
+- post api to send reminder to user on email
+## GET - /get/report
+- get api to get the realtime allocation/projection data in html
+
 
