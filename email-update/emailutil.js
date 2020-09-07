@@ -108,8 +108,19 @@ module.exports = function(){
 
         //called with every property and its value
         function process(key,value) {
-            if (typeof(value)!="object")
-            resultTableData += '<tr><td>' + key + '</td><td> ' +value +'</td></tr>';
+            if (typeof(value)=="object" && key.includes("quarter"))
+            {
+                resultTableData += '<tr><td rowspan="7" >' + key + '</td>' ; //<tr><td> ' +value +'</td><td>232</td></tr></tr>';
+                //traverse(value,process);
+                //resultTableData+= '</tr>'
+            }
+            else{
+                if (key.includes("quarter"))
+                    resultTableData += '<tr><td>' + key + '</td><td> ' +value +'</td></tr></tr>';
+                else
+                    resultTableData += '<tr><td>' + key + '</td><td> ' +value +'</td></tr>';
+            }
+
         }
 
         function traverse(o,func) {
