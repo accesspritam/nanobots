@@ -1,20 +1,21 @@
 var current_field = null;
 const keywords_group = new Map();
 keywords_group.set('add',1);
-keywords_group.set('add alloc',1);
-keywords_group.set('add allocation',1);
+keywords_group.set('add proj',1);
+keywords_group.set('add projection',1);
 keywords_group.set('send reminder',2);
+
 const request = require('request');
+
 let url = "http://localhost:3001/";
 let options = {json: true};
-
 module.exports = function(){ 
     getcurrent_field = function (){
         return current_field;
     } 
     setcurrent_field = function (val){
         current_field = val;
-    } 
+    }
     getkeywords_group = function (){
         return keywords_group;
     } 
@@ -24,10 +25,10 @@ module.exports = function(){
     getgroup_function = async function(group,bot,message){
         switch(group){
             case 1:
-                setcurrent_field('EmployeeId');
+                setcurrent_field('Month');
                 // do something to respond to message
                 await bot.reply(message,'Please provide details as below');
-                await bot.reply(message,'EmployeeId?');
+                await bot.reply(message,'Month and year(MM/YYYY) ?');
                 break;
             case 2:
                 setcurrent_field(null);

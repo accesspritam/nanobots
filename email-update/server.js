@@ -8,8 +8,9 @@ const request = require('request');
 var schedule = require('node-schedule');
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
-const from_id = '<enter you email>';
-const from_pwd = '<enter you password>';
+//const from_id = 'rohit.singh3688infy@OUTLOOK.com';
+const from_id = '';
+const from_pwd = '';
 const apiURL = 'http://localhost:3001/';
 /***
  * Read email template
@@ -17,7 +18,7 @@ const apiURL = 'http://localhost:3001/';
 var imapConfig = {
     user: from_id,
     password: from_pwd,
-    host: 'smtp-mail.outlook.com',
+    host: 'imap.gmail.com',
     port: 993,
     tls: true,
     tlsOptions: {
@@ -76,20 +77,40 @@ function processMessage(msg, seqno) {
         if (data.type === 'text') {
             console.log("Processing msg #" + seqno);
             let mailResponse = data.textAsHtml;
-            let employeeid = mailResponse.split('Employee Id: ')[1].split('<')[0].replace(/^\s+|\s+$/g, '' );
-            let employeeName = mailResponse.split('Employee Name: ')[1].split('<')[0].replace(/^\s+|\s+$/g, '' );
-            let projectcode = mailResponse.split('Project Code: ')[1].split('<')[0].replace(/^\s+|\s+$/g, '' );
-            let allocation = mailResponse.split('Allocation (dd/mm/yyyy): ')[1].split('<')[0].replace(/^\s+|\s+$/g, '' );
-            let employeeAllocJSON = {
-                'employeeId': employeeid,
-                'employeeName': employeeName,
+            console.log(mailResponse);
+            let offshorecount = mailResponse.split('Offshore Addition')[1].split('<')[0].replace(/^\s+|\s+$/g, '' ).split(' ');
+            let onsitecount = mailResponse.split('Onsite Reduction')[1].split('<')[0].replace(/^\s+|\s+$/g, '' ).split(' ');
+            let employeeId = mailResponse.split('emp#')[1].split('<')[0].replace(/^\s+|\s+$/g, '' );
+            let projectcode = mailResponse.split('Project Code :')[1].split('<')[0].replace(/^\s+|\s+$/g, '' );
+            let serviceline = mailResponse.split('Service Line :')[1].split('<')[0].replace(/^\s+|\s+$/g, '' );
+            let projectProjection = {
+                'employeeId' : employeeId,
                 'projectCode': projectcode,
-                'allocation': allocation
+                'serviceLine': serviceline,
+                'projections': []
             };
-            console.log(employeeAllocJSON);
+            projectProjection.projections.push({
+                'offshoreAddition': offshorecount[0],
+                'onshoreReduction': onsitecount[0],
+                'month': 'jul',
+                'year': '2021'
+            });
+            projectProjection.projections.push({
+                'offshoreAddition': offshorecount[1],
+                'onshoreReduction': onsitecount[1],
+                'month': 'aug',
+                'year': '2021'
+            });
+            projectProjection.projections.push({
+                'offshoreAddition': offshorecount[2],
+                'onshoreReduction': onsitecount[2],
+                'month': 'sep',
+                'year': '2021'
+            });
+            console.log(projectProjection);
             request.post({
-                url: apiURL+'postmessage', 
-                json: employeeAllocJSON,
+                url: apiURL+'postprojection', 
+                json: projectProjection,
                 headers: {'content-type' : 'application/json'}
             }
             , (error, res, body) => {
@@ -127,3 +148,7 @@ function processMessage(msg, seqno) {
         parser.end();
     });
 }
+
+
+
+

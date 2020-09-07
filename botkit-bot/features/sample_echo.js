@@ -23,11 +23,25 @@ module.exports = function(controller) {
 
     });
 
-    controller.hears(['add','add alloc','add allocation'],['message'], async (bot,message) => {
+    controller.hears(['add alloc','add allocation'],['message'], async (bot,message) => {
         setcurrent_field('EmployeeId');
         // do something to respond to message
         await bot.reply(message,'Please provide details as below');
         await bot.reply(message,'EmployeeId?');
+    });
+
+    controller.hears(['add','add proj','add projection'],['message'], async (bot,message) => {
+        setcurrent_field('Month');
+        // do something to respond to message
+        await bot.reply(message,'Please provide details as below');
+        await bot.reply(message,'Month and year(MM/YYYY) ?');
+    });
+
+    controller.hears(['fetch','get','report'],['message'], async (bot,message) => {
+        setcurrent_field('fetchbymonth');
+        // do something to respond to message
+        await bot.reply(message,'Please provide details as below');
+        await bot.reply(message,'Month and year(MM/YYYY) or Year(YYYY)?');
     });
 
     controller.hears(['bye','bbyee',new RegExp("\\bby\\b","gi"),'thanks'],['message'], async (bot,message) => {
@@ -38,3 +52,4 @@ module.exports = function(controller) {
       });
 
 }
+
